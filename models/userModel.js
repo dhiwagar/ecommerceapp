@@ -1,6 +1,6 @@
 const mongoose = require("mongoose"); // Erase if already required
 const bcrypt = require("bcrypt");
-const crypto = require("crypto-js");
+const crypto = require('crypto');
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
     {
@@ -46,9 +46,9 @@ var userSchema = new mongoose.Schema(
         type: String,
       },
       wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-    //   passwordChangedAt: Date,
-    //   passwordResetToken: String,
-    //   passwordResetExpires: Date,
+      passwordChangedAt: Date,
+      passwordResetToken: String,
+      passwordResetExpires: Date,
     },
     {
       timestamps: true,
