@@ -12,12 +12,22 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 6000;
 const authRouter = require("./routes/authRoute");
+const categoryRouter = require("./routes/prodcategoryRoute");
 const productRouter =require("./routes/productRoute")
+const brandRouter = require("./routes/brandRoute");
+
+const blogcategoryRouter = require("./routes/blogCatRoute");
+const blogRoute =require("./routes/blogRoute")
 app.use(cookieParser());
 // Middleware to parse JSON requests
 app.use(bodyParser.json());
 app.use("/api/user", authRouter);
+app.use("/api/blog", blogRoute);
+app.use("/api/blogcategory", blogcategoryRouter);
+app.use("/api/brand", brandRouter);
+app.use("/api/category", categoryRouter);
 app.use("/api/product", productRouter);
+
 app.use(notFound);
 app.use(errorHandler);
 app.listen(port, () => {
