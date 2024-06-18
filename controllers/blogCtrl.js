@@ -35,13 +35,14 @@ const createBlog = asyncHandler(async (req, res) => {
     }
   });
   
-   const getBlog = asyncHandler(async (req, res) => {
+  const getBlog = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id);
     try {
       const getBlog = await Blog.findById(id)
-       
-     await Blog.findByIdAndUpdate(
+        .populate("likes")
+        .populate("dislikes");
+      const updateViews = await Blog.findByIdAndUpdate(
         id,
         {
           $inc: { numViews: 1 },
@@ -63,7 +64,7 @@ const createBlog = asyncHandler(async (req, res) => {
       throw new Error(error);
     }
   });
-  const liketheBlog = asyncHandler(async (req, res) => {
+  const   liketheBlog = asyncHandler(async (req, res) => {
     const { blogId } = req.body;
     validateMongoDbId(blogId);
     // Find the blog which you want to be liked
@@ -155,6 +156,26 @@ const createBlog = asyncHandler(async (req, res) => {
       res.json(blog);
     }
   });
+  const uploadImages = asyncHandler(async (req, res) => {
+    const { blogId } = req.body;
+    validateMongoDbId(blogId);
+  
+    try {
+      const files = req.files;
+      const filePaths = files.map(file => file.path);
+  
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        blogId,
+        { $push: { images: { $each: filePaths } } },
+        { new: true }
+      );
+  
+      res.json({ message: "Files uploaded successfully", blog: updatedBlog });
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
+  
 module.exports = {
     createBlog,
     deleteBlog,
@@ -162,5 +183,6 @@ module.exports = {
     getAllBlogs,
     liketheBlog,
     disliketheBlog,
-    getBlog
+    getBlog,
+    uploadImages
   };

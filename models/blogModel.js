@@ -32,6 +32,7 @@ var blogSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
+    
     ],
     dislikes: [
       {
@@ -44,7 +45,10 @@ var blogSchema = new mongoose.Schema(
       type: String,
       default: "Admin",
     },
-    images: [],
+    images: {
+      type: [String],
+    },
+  
   },
   {
     toJSON: {
